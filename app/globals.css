@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: "Playfair Display", serif; /* placeholder — swap for chosen logo-matching display face */
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+body {
+  @apply bg-midnight text-white font-sans;
+}
+
+/* Reusable primitives so every page feels consistent without
+   reinventing card/button/badge styles per component */
+
+.gv-card {
+  @apply bg-[#101410] border border-border rounded-card p-4 transition-shadow hover:shadow-glow-emerald;
+}
+
+.gv-btn-primary {
+  @apply bg-emerald text-midnight font-semibold rounded-full px-6 py-3
+         transition-all hover:bg-neon hover:shadow-glow-neon;
+}
+
+.gv-btn-outline {
+  @apply border border-emerald text-emerald rounded-full px-6 py-3
+         transition-all hover:bg-emerald hover:text-midnight;
+}
+
+.gv-badge-exclusive {
+  @apply inline-flex items-center gap-1 bg-highlight text-midnight text-xs
+         font-bold uppercase tracking-wide rounded-full px-3 py-1;
+}
+
+.gv-badge-sale {
+  @apply inline-flex items-center gap-1 bg-highlight/90 text-midnight text-xs
+         font-bold uppercase tracking-wide rounded-full px-3 py-1;
+}
+
+.gv-section-heading {
+  @apply font-display text-3xl md:text-4xl text-white tracking-tight;
+}
