@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AgeGate } from "@/components/age-gate";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
+import { SiteChrome } from "@/components/site-chrome";
 import { CartProvider } from "@/lib/cart-context";
 
 export const metadata: Metadata = {
@@ -40,9 +39,7 @@ export default function RootLayout({
             Client component — stores confirmation in localStorage/cookie. */}
         <AgeGate />
         <CartProvider>
-          <SiteHeader />
-          <main className="min-h-screen">{children}</main>
-          <SiteFooter />
+          <SiteChrome>{children}</SiteChrome>
         </CartProvider>
       </body>
     </html>

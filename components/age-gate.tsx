@@ -1,16 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const STORAGE_KEY = "gv_age_confirmed";
 
 export function AgeGate() {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
+  const isAdmin = pathname?.startsWith("/admin");
 
   useEffect(() => {
+    if (isAdmin) return;
     const confirmed = window.localStorage.getItem(STORAGE_KEY);
     if (!confirmed) setVisible(true);
-  }, []);
+  }, [isAdmin]);
 
   function confirm() {
     window.localStorage.setItem(STORAGE_KEY, "true");

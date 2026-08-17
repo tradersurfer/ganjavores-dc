@@ -164,9 +164,18 @@ readable straight from the Supabase table editor in the meantime.
 1. `supabase/schema.sql`
 2. `supabase/storage-setup.sql`
 3. `supabase/migration-contact-messages.sql`
-4. `supabase/seed-products.sql` (optional — placeholder catalog data)
+4. `supabase/seed-products.sql` (optional — placeholder catalog, 45 products with guessed pricing/THC%)
+5. `supabase/seed-products-batch2.sql` (optional — 23 more products with REAL data you supplied: actual THC%, terpenes, cannabinoids, cross genetics. Only pricing is placeholder here — search `EDIT ME` for what needs real numbers)
 
-If you already ran `schema.sql` in an earlier round, you only need 2–4 now.
+If you already ran everything through step 4, just run step 5 now — it's additive, won't touch anything already in your database.
+
+## Batch 2 seed data — judgment calls made, flagging directly
+- **Two name collisions with batch 1's house-brand flower** ("Sour Diesel" and "Gelato Cake" exist in both your original placeholder catalog and this real-data batch). Kept both — different brands, different products that happen to share a strain name, which is normal in cannabis retail — but gave the batch-2 versions distinct slugs (`sour-diesel-premium-flower`, `gelato-cake-tapestry`) since `slug` has a unique constraint. Display names are unchanged.
+- **Deduplicated two pairs you sent twice**: "Jungle Boys Gelato #33" appeared twice with nearly identical copy (kept the richer version with the Weedmaps favorite count), and "Jenny Kush by Premium Flower" appeared twice with slightly different lineage text (kept the version with precise lab terpene data in mg/g, converted to % for the terpene table).
+- **No images yet**, per your note — every batch-2 product will show the site's "No image yet" placeholder on the shop grid and PDP until you add images through `/admin/products/[id]`.
+- **No pricing was supplied** — every variant has a placeholder price marked `EDIT ME` in the SQL, sized roughly to match typical pricing for that weight, but these are guesses, not real numbers.
+- **Copyright/SEO flag, not a blocker**: a few of these entries (the "17,770 Favorites • Best of Weedmaps Semifinalist" Gelato #33 copy especially) read like they're sourced from a menu aggregator rather than written fresh. Loaded as-given since it's your call what goes on your own site, but worth knowing this exact text is very likely already published elsewhere — Google may treat it as duplicate content (hurts your own SEO ranking on it) and there's a non-zero chance it's not actually free to reuse. Say the word and I'll rewrite any of these in Ganjavores' voice instead.
+- **Brand judgment call**: several products were listed as "[Strain] by Premium Flower" where a *different* cultivator name also appeared in the text (e.g. "Jungle Boys Sherbinski by Premium Flower"). I used the more recognizable cultivator name (Jungle Boys) as the brand for those specifically, and "Premium Flower" as brand for everything else attributed to them — reasoning that customers search/filter by the cultivator name, not the packager. If Premium Flower should be the brand of record on all of these regardless, tell me and I'll reassign.
 
 ## Round 3 additions (shop grid → PDP → cart/checkout → admin, in that order)
 
