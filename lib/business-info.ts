@@ -16,16 +16,14 @@
  *     third-party directories by accident (marketing is working on
  *     getting it removed). Never put this one anywhere in the codebase.
  *
- * ganjavores.com's old Shopify store is confirmed dead (redirects to a
- * generic "this website is not available" Shopify landing page) — see
- * DEPLOYMENT.md, this clears the way to point the domain straight at
- * this new build without worrying about taking down a live store.
+ * ganjavores.com's old Shopify store is confirmed dead — this new
+ * Next.js/Supabase build replaces it entirely. See DEPLOYMENT.md.
  */
 export const BUSINESS = {
   name: "Ganjavores DC",
   legalName: "Ganjavores DC LLC",
   phone: "202-709-8944",
-  email: "info@ganjavores.com",
+  email: "info@ganjavores.shop",
   address: {
     street: "531 8th St SE",
     city: "Washington",
@@ -34,7 +32,7 @@ export const BUSINESS = {
   },
   hours: {
     // adjustable in /admin later — this is the fallback default
-    display: "12PM – 10PM Daily",
+    display: "10AM – 10PM Daily",
   },
   serviceArea: "Washington, DC & the DMV",
   slogans: {
@@ -44,7 +42,7 @@ export const BUSINESS = {
   },
   social: {
     x: "https://x.com/ganjavores",
-    instagram: "",
+    instagram: "https://www.instagram.com/ganjavores/",
     tiktok: "",
   },
   // Google Business Profile + Apple Maps share.google links you sent still
@@ -52,6 +50,6 @@ export const BUSINESS = {
   // resolved long-form URLs here once you have them. Not blocking launch;
   // the site works fine without these, they're just nice-to-have footer links.
   googleBusinessProfileUrl: "",
-  appleMapsUrl: "",
+  appleMapsUrl: "https://maps.apple.com/place?place-id=I6D8D95F837E2A33B&address=531+8th+St+SE%2C+Washington%2C+DC++20003%2C+United+States&coordinate=38.881836%2C-76.995344&name=+Ganjavores&_provider=9902",
   license: "Licensed Medical Cannabis Internet Retailer under DC ABCA",
 } as const;

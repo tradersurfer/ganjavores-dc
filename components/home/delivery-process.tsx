@@ -80,15 +80,11 @@ export function DeliveryProcess() {
       </div>
 
       <p className="text-center text-soft text-sm mt-10">
-        Questions? Call or text{" "}
-        <a href={`tel:${BUSINESS.phone}`} className="text-emerald hover:text-neon">
-          {BUSINESS.phone}
-        </a>{" "}
-        or visit{" "}
-        <a href="https://ganjavores.com" className="text-emerald hover:text-neon">
-          Ganjavores.com
-        </a>
-        .
+      Questions? Call or text{" "}
+      <a href={`tel:${BUSINESS.phone}`} className="text-emerald hover:text-neon">
+        {BUSINESS.phone}
+      </a>{" "}
+      .
       </p>
     </section>
   );

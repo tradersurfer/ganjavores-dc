@@ -63,6 +63,105 @@ Pulled the visual/interaction ideas that are still useful: the "Local Trust" spl
 ## Not started yet (needs more assets or your go-ahead)
 - Judge.me/Loox review widget swap-in — native reviews are already built and working; only relevant if you specifically want one of these providers instead.
 - Real Google Business Profile / Apple Maps URLs — the share.google links you sent can't be auto-resolved (see DEPLOYMENT.md), so these fields are empty until you paste the resolved links in.
+- 7 batch3 lifestyle/generic images (Muha Meds trio shot, bulk flower bags, 5 generic bud macro photos) — not auto-attached to any specific product since they're not tied to one SKU; filed in `/public/misc-lifestyle/` for you to place manually wherever makes sense (deals banners, generic category headers, etc).
+- 5 real customer review screenshots (Yelp + Google Business Profile) — filed in `/public/misc-review-screenshots/`, not wired into the site. Our reviews table requires a `product_id` (schema-enforced, not optional), so a general "customers say" testimonial isn't a natural fit without either picking one product to attach each review to (which would misrepresent what the review was actually about) or adding a new site-wide testimonials feature. Flagging rather than guessing — say the word if you want that feature built.
+- Still-missing product images: everything from batch2 (the 23 real-data products from a few rounds back — Permanent Marker, Hawk Tuah, Purple Dream, Grape Gas, Chemdawg 91, Peanut Butter Breath, Sherbinski, Duct Tape, Super Lemon G, Wedding Cake, Colonial Kush, etc.) and about half of batch3 (91 Octane, Apple Gelato ICE, Bat Sh!t, Black Cherry Gelato, Cinnamon Milk, Khalifa Kush, Gary Payton cartridge, Lemonchello) still show "No image yet."
+
+## Batch 3 image handoff — bugs caught, decisions made
+
+**Two real duplicate-product bugs caught and fixed before they reached your
+database**, discovered while cross-checking product names against the image
+mapping (the handoff doc's own image-matching script used size-based
+heuristics, not product identity — good enough for photo matching, not
+reliable enough to trust blindly for catalog logic):
+
+1. **The 6 Jeeter Juice flavors got inserted as duplicate products.**
+   `seed-products-batch3.sql` (from a few messages back) correctly updated
+   batch1's 6 existing Jeeter Juice entries with real pricing — but it *also*
+   inserted those same 6 flavors again under their spreadsheet names ("Ice
+   Cream Cake Live Resin Disposable Straw" etc), creating 12 listings for 6
+   real products. Fixed the generator and regenerated the file. **If you
+   already ran the old version of `seed-products-batch3.sql`, run
+   `supabase/cleanup-duplicates.sql` once** to remove the 6 duplicates —
+   safe to run either way, it's a no-op if you haven't hit this.
+2. **"Gelato #33 (Larry Bird)" would have been a second duplicate of batch2's
+   "Gelato #33"** — same brand (Jungle Boys), same strain, "Larry Bird" is
+   literally the alias already in batch2's own description. Caught this one
+   before it shipped at all. It's now an `UPDATE` that gives batch2's
+   existing Gelato #33 the real 4-tier pricing this sheet had
+   ($65/$120/$220/$380) instead of a duplicate listing.
+   `cleanup-duplicates.sql` also covers this one if needed.
+
+**Image verification**: spot-checked several of the higher-risk matches
+directly (both house-brand flower jars, two of the six near-identical Jeeter
+Juice pouches) before trusting the rest of the provided mapping — all
+confirmed correct. One thing worth flagging on the images themselves: **both
+Ganjavores house-brand jar mockups (Green Crack, Sour Diesel) show "NC" state
+compliance text on the label**, not DC. If these are generic template mockups
+reused from the Winston-Salem/Charlotte side of the business, that's fine for
+internal reference — but confirm before these go live on the DC site itself,
+since DC has different regulatory requirements than NC hemp product labeling.
+
+**30 of 42 images matched and attached** to real product rows via
+`seed-images-batch1.sql` (run after all four product-seed files). The other
+12 are either lifestyle/generic shots (7, filed separately) or customer
+review screenshots (5, filed separately, not wired in — see above).
+- Product images for the batch-3 spreadsheet catalog — none were attached this round; every one of these 38 products will show "No image yet" until you add them via `/admin/products/[id]`.
+
+## Batch 3 — 40 products from Cannabis_Product_Descriptions.xlsx
+
+Real spreadsheet data: 32 of 40 rows had actual pricing (several as full per-size
+tier strings like `3.5g: $65 | 7g: $120 | 14g: $220 | 28g: $380`, parsed into one
+variant row per size). Real THC%/CBD%/terpenes/genetics throughout, not
+placeholders. 14 new brands added.
+
+**Three real bugs caught and fixed while building this — worth knowing about even
+though they're already fixed, since they show up as the difference between what
+a naive spreadsheet import would have produced vs. what's actually in the SQL:**
+
+1. **A "CBG / Notes" cell literally contained a full terpene breakdown**
+   (`"Terpenes: 1.16% Linalool, 1.12% Myrcene, ..."`) for the White Runtz
+   pre-rolls. A blind percent-scan would have averaged those four numbers into
+   a fake ~0.9% CBG value. Caught it, routed it to the terpenes table with the
+   real per-compound percentages instead, and made sure the plain
+   Dominant-Terpene column for that same row didn't *also* insert those
+   compounds a second time without percentages.
+2. **Two products' CBG/Notes cells contained unrelated product text that
+   happened to start with a percent** — `"100% Live Resin Disposable Straw
+   (500mg)"` was getting read as 100% CBG, which is physically nonsensical.
+   Fixed by requiring the word "CBG" to actually follow the percent sign (or
+   nothing at all) before trusting it as a real CBG value — a bare percent
+   followed by unrelated product description text is now correctly ignored.
+3. **Three slug collisions against products already in batch1/batch2** —
+   `duct-tape` and `jenny-kush` (batch2) and the earlier `sour-diesel`
+   (batch1). Checked each individually rather than blindly renaming:
+   - **Duct Tape**: genuinely the same product, same genetics/THC/effects as
+     batch2's entry — skipped re-inserting it entirely, nothing new to add.
+   - **Jenny Kush**: same genetics but attributed to a *different* brand
+     (Cultivation Labs here vs. Premium Flower in batch2) with real 4-tier
+     pricing batch2 never had — kept both as separate products
+     (`jenny-kush-cultivation-labs`), consistent with how Sour
+     Diesel/Gelato Cake already coexist across brands in this catalog.
+   - **Sour Diesel**: same house-brand product as batch1's placeholder
+     version — **updated the existing row in place** with the real 4-tier
+     Ganjavores House Flower pricing ($45/$80/$140/$190) instead of leaving
+     stale guessed numbers next to real ones for the same product.
+4. **Jeeter Juice pricing corrected in place** — all 6 Jeeter Juice Live Resin
+   flavors from batch1 (placeholder $40, mixed 1g/500mg labels) got their
+   pricing updated to the real $65 / 500mg data from this sheet, via `UPDATE`
+   rather than creating 6 duplicate listings for the same real products.
+5. **Blueberry Banana** appears twice in the spreadsheet itself under two
+   different brands ("Cookies Premium Flower" vs. plain "Cookies") — kept
+   both, disambiguated to `blueberry-banana-cookies-premium-flower` and
+   `blueberry-banana`.
+6. **8 of 40 products had no price in the sheet** — inferred from the Notes
+   sheet's own pricing-tier structure (Premium/Top Shelf/Exclusive per-gram
+   rates) and comparable priced siblings already in the same sheet. Every one
+   of these is marked `-- EDIT ME: inferred price, confirm` in the SQL —
+   search that string to find exactly which 7 (Duct Tape's inferred price
+   became moot since that row was skipped) need a real number from you:
+   91 Octane, Bat Sh!t, Cinnamon Milk, Khalifa Kush, Gary Payton (cartridge),
+   Lemonchello, and Blueberry Banana (Cookies Premium Flower).
 
 ## Round 6 additions (confirmed business info, Resend wired live, Klaviyo signup)
 
@@ -166,8 +265,11 @@ readable straight from the Supabase table editor in the meantime.
 3. `supabase/migration-contact-messages.sql`
 4. `supabase/seed-products.sql` (optional — placeholder catalog, 45 products with guessed pricing/THC%)
 5. `supabase/seed-products-batch2.sql` (optional — 23 more products with REAL data you supplied: actual THC%, terpenes, cannabinoids, cross genetics. Only pricing is placeholder here — search `EDIT ME` for what needs real numbers)
+6. `supabase/seed-products-batch3.sql` (optional — 31 more products from your spreadsheet, mostly real pricing this time. Run this AFTER batch2, since it UPDATEs a few products batch2 created. Only 7 products still need real pricing — search `EDIT ME`)
+7. `supabase/cleanup-duplicates.sql` (only needed if you'd already run an OLDER copy of batch3 before this round's fixes — safe/no-op otherwise)
+8. `supabase/seed-images-batch1.sql` (optional — attaches 30 real product images; run after steps 4-6 since it references products those files create)
 
-If you already ran everything through step 4, just run step 5 now — it's additive, won't touch anything already in your database.
+If you already ran everything through step 5, just run steps 6-8 now.
 
 ## Batch 2 seed data — judgment calls made, flagging directly
 - **Two name collisions with batch 1's house-brand flower** ("Sour Diesel" and "Gelato Cake" exist in both your original placeholder catalog and this real-data batch). Kept both — different brands, different products that happen to share a strain name, which is normal in cannabis retail — but gave the batch-2 versions distinct slugs (`sour-diesel-premium-flower`, `gelato-cake-tapestry`) since `slug` has a unique constraint. Display names are unchanged.

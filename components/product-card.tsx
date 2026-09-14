@@ -16,7 +16,7 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <Link href={`/product/${product.slug}`} className="gv-card group block">
-      <div className="relative aspect-square mb-3 overflow-hidden rounded-lg bg-[#0d110d]">
+      <div className="relative aspect-square mb-3 overflow-hidden rounded-lg bg-[#0d110d] flex items-center justify-center">
         {primaryImage ? (
           <Image
             src={primaryImage.url}
@@ -26,8 +26,11 @@ export function ProductCard({ product }: { product: Product }) {
             sizes="(max-width: 768px) 50vw, 25vw"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-soft/40 text-sm">
-            No image yet
+          <div className="w-full h-full flex items-center justify-center text-soft/30 text-sm bg-[#0d110d]">
+            <div className="text-center">
+              <p className="text-xs tracking-wider uppercase">Product Image</p>
+              <p className="text-[10px] mt-1">Coming Soon</p>
+            </div>
           </div>
         )}
 
