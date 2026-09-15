@@ -59,6 +59,17 @@ function LoginForm() {
         <button type="submit" disabled={loading} className="gv-btn-primary w-full disabled:opacity-50">
           {loading ? "Signing in..." : "Sign In"}
         </button>
+
+        <p className="text-center text-xs text-soft">
+          Don't have an account?{" "}
+          <a href="/admin/request-access" className="text-emerald hover:text-neon">
+            Request Access
+          </a>
+          {" · "}
+          <a href="https://ogaisocuxygcembgodna.supabase.co/auth/v1/recover?email=jordanad46@gmail.com" target="_blank" rel="noopener noreferrer" className="text-emerald hover:text-neon">
+            Reset Password
+          </a>
+        </p>
       </form>
     </div>
   );
