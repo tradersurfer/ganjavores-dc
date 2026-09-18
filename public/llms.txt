@@ -1,0 +1,28 @@
+# Ganjavores DC
+
+> Licensed medical cannabis delivery & curbside pickup in Washington, DC and the DMV. House line: Ganjavores Exclusive.
+
+## Quick Links
+
+- [Shop All Products](https://ganjavores.shop/shop): Full menu of flower, vapes, edibles, pre-rolls, and concentrates.
+- [View Deals](https://ganjavores.shop/deals): Current specials and limited-time drops.
+- [Our Blog](https://ganjavores.shop/blog): Cannabis education, strain guides, and company updates.
+- [About Us](https://ganjavores.shop/about): Our story, licensing, and team.
+- [Contact](https://ganjavores.shop/contact): Call, text, or email us — 202-709-8944.
+- [Brands We Carry](https://ganjavores.shop/brands): Rise, Cookies, Royal Smoke, District Cannabis, The DC Dispensary, Grow West, and our house line.
+- [Pricing](https://ganjavores.shop/pricing): How ordering and payment works — pay on arrival, no online payments collected.
+- [FAQ](https://ganjavores.shop/faq): Answers to common questions about delivery, ID requirements, and our medical cannabis program.
+
+## API
+
+- [AI Plugin Manifest](https://ganjavores.shop/.well-known/ai-plugin.json): Claude / ChatGPT plugin discovery.
+- [Skill Description](https://ganjavores.shop/skill.md): What agent tasks this site supports.
+
+## Company
+
+- Legal name: Ganjavores DC LLC
+- Address: 531 8th St SE, Washington, DC 20003
+- Phone: 202-709-8944
+- License: Licensed Medical Cannabis Internet Retailer under DC ABCA
+- Service area: Washington, DC & the DMV
+- Social: [X](https://x.com/ganjavores) · [Instagram](https://www.instagram.com/ganjavores/)

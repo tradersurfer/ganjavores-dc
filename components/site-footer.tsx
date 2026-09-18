@@ -14,6 +14,8 @@ export function SiteFooter() {
             <li><Link href="/shop" className="hover:text-emerald">Shop</Link></li>
             <li><Link href="/deals" className="hover:text-emerald">Deals</Link></li>
             <li><Link href="/brands" className="hover:text-emerald">Brands We Carry</Link></li>
+            <li><Link href="/pricing" className="hover:text-emerald">Pricing</Link></li>
+            <li><Link href="/faq" className="hover:text-emerald">FAQ</Link></li>
             <li><Link href="/about" className="hover:text-emerald">About</Link></li>
             <li><Link href="/contact" className="hover:text-emerald">Contact</Link></li>
           </ul>

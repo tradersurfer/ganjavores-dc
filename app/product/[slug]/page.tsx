@@ -26,7 +26,23 @@ export async function generateMetadata({
     openGraph: {
       title: product.name,
       description: product.short_description ?? undefined,
-      images: product.images[0] ? [product.images[0].url] : undefined,
+      images: product.images[0]
+        ? [product.images[0].url]
+        : [
+            {
+              url: "/api/og?title=" + encodeURIComponent(product.name),
+              width: 1200,
+              height: 630,
+              alt: product.name,
+            },
+          ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.name,
+      images: product.images[0]
+        ? [product.images[0].url]
+        : ["/api/og?title=" + encodeURIComponent(product.name)],
     },
   };
 }
@@ -42,6 +58,7 @@ export default async function ProductPage({
   if (!product) notFound();
 
   // JSON-LD structured data for SEO — Product schema per the build spec
+  // Enhanced with sku, category, url, and per-offer details
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -49,15 +66,58 @@ export default async function ProductPage({
     description: product.short_description ?? product.description,
     image: product.images.map((i) => i.url),
     brand: product.brand ? { "@type": "Brand", name: product.brand.name } : undefined,
+    category: product.category?.name,
+    sku: product.id,
+    url: `https://ganjavores.shop/product/${product.slug}`,
     offers: product.variants.map((v) => ({
       "@type": "Offer",
+      name: v.label,
       price: v.price,
       priceCurrency: "USD",
       availability:
         v.inventory_count > 0
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
+      url: `https://ganjavores.shop/product/${product.slug}#variant-${v.id}`,
+      priceValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split("T")[0],
     })),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://ganjavores.shop/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Shop",
+        item: "https://ganjavores.shop/shop",
+      },
+      ...(product.category
+        ? [
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: product.category.name,
+              item: `https://ganjavores.shop/shop?category=${product.category.slug}`,
+            },
+          ]
+        : []),
+      {
+        "@type": "ListItem",
+        position: product.category ? 4 : 3,
+        name: product.name,
+        item: `https://ganjavores.shop/product/${product.slug}`,
+      },
+    ],
   };
 
   return (
@@ -65,6 +125,12 @@ export default async function ProductPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd),
+        }}
       />
 
       <nav className="text-sm text-soft mb-6 flex gap-2">

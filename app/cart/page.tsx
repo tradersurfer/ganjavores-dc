@@ -9,6 +9,21 @@ export default function CartPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 md:px-6 py-10">
+      {/* BreadcrumbList JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: "https://ganjavores.shop/" },
+              { "@type": "ListItem", position: 2, name: "Your Bag", item: "https://ganjavores.shop/cart" },
+            ],
+          }),
+        }}
+      />
+
       <h1 className="gv-section-heading mb-8">Your Bag</h1>
 
       {lines.length === 0 ? (

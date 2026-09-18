@@ -44,6 +44,11 @@ export const BUSINESS = {
     x: "https://x.com/ganjavores",
     instagram: "https://www.instagram.com/ganjavores/",
     tiktok: "",
+    // sameAs — for Organization JSON-LD knowledge graph
+    sameAs: [
+      "https://x.com/ganjavores",
+      "https://www.instagram.com/ganjavores/",
+    ],
   },
   // Google Business Profile + Apple Maps share.google links you sent still
   // can't be auto-resolved (both block automated access) — paste the

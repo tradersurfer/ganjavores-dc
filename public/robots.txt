@@ -1,0 +1,32 @@
+User-agent: *
+Allow: /
+
+# AI / LLM crawler access — explicit Allow so crawlers don't fall back to
+# defaults. See AEO report: "GPTBot not explicitly addressed" etc.
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# Admin area — not for crawlers
+Disallow: /admin$
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://ganjavores.shop/sitemap.xml

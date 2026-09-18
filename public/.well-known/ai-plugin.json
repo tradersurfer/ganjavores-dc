@@ -1,0 +1,16 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Ganjavores DC",
+  "name_for_model": "ganjavores_dc",
+  "description_for_human": "Browse the Ganjavores DC medical cannabis catalog, check deals, and get store info — licensed delivery & curbside pickup in Washington, DC.",
+  "description_for_model": "Plugin for browsing Ganjavores DC's product catalog (flower, vapes, edibles, pre-rolls, concentrates), viewing current deals, and retrieving store contact info, hours, and policies. All products are licensed medical cannabis from verified DC ABCA suppliers. Pay on arrival — no online payments.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi_100",
+    "url": "https://ganjavores.shop/openapi.json"
+  },
+  "logo_url": "https://ganjavores.shop/brand/logo.png",
+  "contact_email": "info@ganjavores.shop"
+}

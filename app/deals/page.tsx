@@ -6,6 +6,22 @@ import { createClient } from "@/lib/supabase/server";
 export const metadata: Metadata = {
   title: "Deals",
   description: "Current deals and drops at Ganjavores DC.",
+  openGraph: {
+    title: "Deals & Specials — Ganjavores DC",
+    description: "Current deals and drops at Ganjavores DC.",
+    url: "https://ganjavores.shop/deals",
+    siteName: "Ganjavores DC",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "https://ganjavores.shop/api/og?title=Current%20Deals",
+        width: 1200,
+        height: 630,
+        alt: "Ganjavores DC — Current Deals",
+      },
+    ],
+  },
 };
 
 export const dynamic = "force-dynamic";
@@ -21,6 +37,21 @@ export default async function DealsPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 md:px-6 py-10">
+      {/* BreadcrumbList JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: "https://ganjavores.shop/" },
+              { "@type": "ListItem", position: 2, name: "Deals & Specials", item: "https://ganjavores.shop/deals" },
+            ],
+          }),
+        }}
+      />
+
       <h1 className="gv-section-heading mb-2">Current Deals &amp; Drops</h1>
       <p className="text-soft mb-8">
         Deals rotate regularly — check back often, or ask about text/email alerts next

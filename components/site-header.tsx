@@ -14,6 +14,8 @@ const NAV_LINKS = [
   { label: "Deals", href: "/deals" },
   { label: "Brands We Carry", href: "/brands" },
   { label: "Ganjavores Exclusive", href: "/shop/ganjavores-exclusive" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "FAQ", href: "/faq" },
   { label: "About", href: "/about" },
 ];
 

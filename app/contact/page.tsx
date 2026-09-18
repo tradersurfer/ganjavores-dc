@@ -2,15 +2,57 @@ import type { Metadata } from "next";
 import { BUSINESS } from "@/lib/business-info";
 import { ContactForm } from "@/components/contact-form";
 import { GoogleMapEmbed } from "@/components/google-map-embed";
+import { generateFAQJsonLd } from "@/components/home/faq-section";
 
 export const metadata: Metadata = {
   title: "Contact",
   description: "Get in touch with Ganjavores DC — call, text, or send a message.",
+  openGraph: {
+    title: "Contact — Ganjavores DC",
+    description: "Call, text, or send a message to Ganjavores DC.",
+    url: "https://ganjavores.shop/contact",
+    siteName: "Ganjavores DC",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "https://ganjavores.shop/api/og?title=Contact%20Us",
+        width: 1200,
+        height: 630,
+        alt: "Ganjavores DC — Contact",
+      },
+    ],
+  },
 };
 
 export default function ContactPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 md:px-6 py-16">
+      {/* FAQPage JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: generateFAQJsonLd().mainEntity,
+          }),
+        }}
+      />
+      {/* BreadcrumbList JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: "https://ganjavores.shop/" },
+              { "@type": "ListItem", position: 2, name: "Contact", item: "https://ganjavores.shop/contact" },
+            ],
+          }),
+        }}
+      />
       <h1 className="gv-section-heading mb-2">Contact Us</h1>
       <p className="text-soft mb-8">
         Fastest way to reach us is by phone or text — email and this form work too, just

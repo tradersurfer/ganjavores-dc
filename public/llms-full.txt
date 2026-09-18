@@ -1,0 +1,91 @@
+# Ganjavores DC — Full AI Context
+
+> Licensed medical cannabis delivery & curbside pickup in Washington, DC and the DMV.
+
+## Company
+
+- **Name**: Ganjavores DC
+- **Legal name**: Ganjavores DC LLC
+- **License**: Licensed Medical Cannabis Internet Retailer under DC ABCA
+- **Address**: 531 8th St SE, Washington, DC 20003
+- **Phone**: 202-709-8944
+- **Email**: info@ganjavores.shop
+- **Hours**: 10AM – 10PM Daily (Delivery & Curbside Pickup)
+- **Service area**: Washington, DC & the DMV
+- **Slogan**: "We Don't Compete — We Consume the Competition."
+- **Social**: X (@ganjavores) · Instagram (@ganjavores)
+
+## What We Offer
+
+Ganjavores DC is a licensed medical cannabis Internet Retailer serving
+Washington, DC and the greater DMV area. We offer discreet delivery and
+curbside pickup with pay-on-arrival — no online payments are ever collected.
+
+### Product Categories
+
+- **Flower** — premium indoor and sungrown cannabis, including our house line
+  Ganjavores Exclusive.
+- **Vapes** — cartridges and disposable pens from top brands (Jungle Boys,
+  Cookies, District Cannabis, etc.).
+- **Edibles** — gummies, chocolates, drinks, and other infused products.
+- **Pre-rolls** — hand-rolled joints and cones.
+- **Concentrates** — live resin, rosin, shatter, and more.
+
+### Brands We Carry
+
+Rise, Cookies, Royal Smoke, District Cannabis, The DC Dispensary, Grow West,
+Plus CBD, and our own **Ganjavores Exclusive** house line — top quality,
+lower prices.
+
+## How Ordering Works
+
+1. **Browse** our menu at ganjavores.shop/shop
+2. **Add** items to your cart — you are NOT charged online
+3. **Checkout** with your delivery address or select curbside pickup
+4. **Confirm** — a delivery agent calls or texts to verify details
+5. **Receive** — pay cash or card on arrival, show valid Photo ID
+
+## Payment
+
+We do not collect payments online. Payment methods accepted on arrival:
+
+- Cash (exact change preferred)
+- Card (chip or contactless)
+
+## Legal
+
+All products are for licensed medical cannabis patients and adults 21+ as
+permitted under DC law. Must present valid government-issued Photo ID upon
+delivery or pickup. All cannabis products are final sale.
+
+## FAQ Highlights
+
+**Do you accept credit cards?** — No online payments. Pay cash or card when
+you receive your order.
+
+**What ID do I need?** — Valid government-issued Photo ID. Must be 21+ or a
+valid DC medical cannabis patient.
+
+**How long does delivery take?** — Most DC orders are same-day. A driver
+contacts you to confirm timing after you place your order.
+
+**What areas do you serve?** — Washington, DC and the DMV. Curbside pickup
+at 531 8th St SE, Washington, DC 20003.
+
+## Pages
+
+- Home: https://ganjavores.shop/
+- Shop: https://ganjavores.shop/shop
+- Deals: https://ganjavores.shop/deals
+- Brands: https://ganjavores.shop/brands
+- About: https://ganjavores.shop/about
+- Contact: https://ganjavores.shop/contact
+- Pricing: https://ganjavores.shop/pricing
+- FAQ: https://ganjavores.shop/faq
+
+## AI Discovery
+
+- llms.txt: https://ganjavores.shop/llms.txt
+- skill.md: https://ganjavores.shop/skill.md
+- ai-plugin.json: https://ganjavores.shop/.well-known/ai-plugin.json
+- security.txt: https://ganjavores.shop/.well-known/security.txt

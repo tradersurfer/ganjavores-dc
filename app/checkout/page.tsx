@@ -44,6 +44,21 @@ export default function CheckoutPage() {
   if (lines.length === 0) {
     return (
       <div className="max-w-3xl mx-auto px-4 md:px-6 py-16 text-center">
+        {/* BreadcrumbList JSON-LD */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://ganjavores.shop/" },
+                { "@type": "ListItem", position: 2, name: "Cart", item: "https://ganjavores.shop/cart" },
+                { "@type": "ListItem", position: 3, name: "Checkout", item: "https://ganjavores.shop/checkout" },
+              ],
+            }),
+          }}
+        />
         <p className="text-white text-lg mb-4">Your bag is empty.</p>
         <Link href="/shop" className="gv-btn-primary inline-block">
           Start Shopping

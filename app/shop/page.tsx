@@ -9,6 +9,23 @@ export const metadata: Metadata = {
   title: "Shop All Products",
   description:
     "Browse Ganjavores DC's full catalog — premium flower, vapes, edibles, pre-rolls, concentrates, and our house line Ganjavores Exclusive. Filter by category, brand, strain, price, and THC%.",
+  openGraph: {
+    title: "Shop All Products — Ganjavores DC",
+    description:
+      "Full menu of premium flower, vapes, edibles, pre-rolls, and concentrates.",
+    url: "https://ganjavores.shop/shop",
+    siteName: "Ganjavores DC",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "https://ganjavores.shop/api/og?title=Shop%20All%20Products",
+        width: 1200,
+        height: 630,
+        alt: "Ganjavores DC — Shop All Products",
+      },
+    ],
+  },
 };
 
 // Re-fetch on every request rather than caching a stale catalog —
@@ -68,6 +85,20 @@ export default async function ShopPage({
             "Every product we carry, all in one place — house-grown Ganjavores Exclusive flower alongside the DMV's best brands. Filter it down to exactly what you're after."}
         </p>
       </div>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: "https://ganjavores.shop/" },
+              { "@type": "ListItem", position: 2, name: "Shop All Products", item: "https://ganjavores.shop/shop" },
+            ],
+          }),
+        }}
+      />
 
       <ShopSearchBar />
 

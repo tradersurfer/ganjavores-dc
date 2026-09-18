@@ -1,9 +1,56 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getShopProducts } from "@/lib/supabase/queries";
+import { getShopProducts, getAllBrands } from "@/lib/supabase/queries";
 import { ProductCard } from "@/components/product-card";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const supabase = await createClient();
+  const { data: brand } = await supabase
+    .from("brands")
+    .select("name, description, slug")
+    .eq("slug", slug)
+    .single();
+
+  if (!brand) return {};
+
+  return {
+    title: `${brand.name} | Ganjavores DC`,
+    description:
+      brand.description ??
+      `Shop ${brand.name} products at Ganjavores DC — licensed medical cannabis delivery in Washington, DC.`,
+    openGraph: {
+      title: `${brand.name} | Ganjavores DC`,
+      description:
+        brand.description ??
+        `Shop ${brand.name} products at Ganjavores DC.`,
+      url: `https://ganjavores.shop/brands/${brand.slug}`,
+      siteName: "Ganjavores DC",
+      locale: "en_US",
+      type: "website",
+      images: [
+        {
+          url: `https://ganjavores.shop/api/og?title=${encodeURIComponent(brand.name)}`,
+          width: 1200,
+          height: 630,
+          alt: `${brand.name} at Ganjavores DC`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${brand.name} | Ganjavores DC`,
+      images: [`https://ganjavores.shop/api/og?title=${encodeURIComponent(brand.name)}`],
+    },
+  };
+}
 
 export default async function BrandPage({
   params,
@@ -39,6 +86,36 @@ export default async function BrandPage({
           ))}
         </div>
       )}
+
+      {/* BreadcrumbList JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: "https://ganjavores.shop/" },
+              { "@type": "ListItem", position: 2, name: "Brands", item: "https://ganjavores.shop/brands" },
+              { "@type": "ListItem", position: 3, name: brand.name, item: `https://ganjavores.shop/brands/${brand.slug}` },
+            ],
+          }),
+        }}
+      />
+
+      {/* Brand JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Brand",
+            name: brand.name,
+            url: `https://ganjavores.shop/brands/${brand.slug}`,
+            description: brand.description,
+          }),
+        }}
+      />
     </div>
   );
 }

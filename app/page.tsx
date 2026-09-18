@@ -8,12 +8,35 @@ import { CategoryGrid } from "@/components/home/category-grid";
 import { DeliveryProcess } from "@/components/home/delivery-process";
 import { ProductCard } from "@/components/product-card";
 import { KlaviyoSignup } from "@/components/klaviyo-signup";
+import { FAQSection, generateFAQJsonLd } from "@/components/home/faq-section";
 import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Ganjavores DC | Premium Medical Cannabis Delivery in Washington, DC",
   description:
     "Licensed medical cannabis delivery in Washington DC. Premium flower, vapes, edibles & Ganjavores Exclusive. Fast, discreet delivery or curbside pickup. Pay on arrival. 202-709-8944.",
+  openGraph: {
+    title: "Ganjavores DC | Premium Medical Cannabis Delivery in Washington, DC",
+    description:
+      "Licensed medical cannabis delivery in Washington DC. Premium flower, vapes, edibles & Ganjavores Exclusive. Fast, discreet delivery or curbside pickup. Pay on arrival. 202-709-8944.",
+    url: "https://ganjavores.shop",
+    siteName: "Ganjavores DC",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "https://ganjavores.shop/api/og",
+        width: 1200,
+        height: 630,
+        alt: "Ganjavores DC — Premium Medical Cannabis Delivery",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ganjavores DC | Premium Medical Cannabis Delivery in Washington, DC",
+    images: ["/api/og"],
+  },
 };
 
 export const dynamic = "force-dynamic";
@@ -103,6 +126,16 @@ export default async function HomePage() {
       </section>
 
       <DeliveryProcess />
+
+      {/* FAQ section — adds substantive FAQ content for AI crawlers (text-to-HTML ratio fix) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(generateFAQJsonLd()),
+        }}
+      />
+
+      <FAQSection />
     </>
   );
 }
