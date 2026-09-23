@@ -17,7 +17,10 @@ function generateOrderNumber() {
 export async function placeOrder(
   values: unknown,
   lines: unknown
-): Promise<{ success: true; orderId: string } | { success: false; error: string }> {
+): Promise<
+  | { success: true; orderId: string }
+  | { success: false; error: string; orderId?: string }
+> {
   const parsed = checkoutSchema.safeParse(values);
   if (!parsed.success) {
     return { success: false, error: parsed.error.issues[0]?.message ?? "Invalid form" };
@@ -84,13 +87,22 @@ export async function placeOrder(
     return { success: false, error: "Order created but items failed to save — call us." };
   }
 
-  await sendOrderNotification({
+  const notifyResult = await sendOrderNotification({
     order_number: orderNumber,
+    orderId: order.id,
     customer_name: data.customer_name,
     customer_phone: data.customer_phone,
+    customer_email: data.customer_email,
     fulfillment_type: data.fulfillment_type,
     subtotal,
   });
+
+  if (!notifyResult.sent) {
+    // Order is persisted — only the confirmation email failed.
+    // Return the typed error + orderId so the frontend can show the
+    // order number as a legally-required disclosure fallback.
+    return { success: false, error: "EMAIL_DISPATCH_FAILED", orderId: order.id };
+  }
 
   return { success: true, orderId: order.id };
 }

@@ -39,6 +39,12 @@ export default function CheckoutPage() {
     if (result.success) {
       clear();
       router.push(`/order-confirmation/${result.orderId}`);
+    } else if (result.error === "EMAIL_DISPATCH_FAILED" && result.orderId) {
+      // Order was saved but the confirmation email failed to dispatch.
+      // Navigate to the confirmation page with a flag so it can render
+      // the order number + a "save this page" compliance fallback.
+      clear();
+      router.push(`/order-confirmation/${result.orderId}?email=failed`);
     } else {
       setServerError(result.error);
     }
