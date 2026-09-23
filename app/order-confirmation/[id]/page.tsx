@@ -6,10 +6,13 @@ export const dynamic = "force-dynamic";
 
 export default async function OrderConfirmationPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ email?: string }>;
 }) {
   const { id } = await params;
+  const { email: emailParam } = await searchParams;
   // Service-role client, server-only — see lib/supabase/service.ts for
   // why this page can't just use the public anon client + a permissive
   // RLS policy (that would leak every order to anyone with the anon key).
@@ -47,6 +50,23 @@ export default async function OrderConfirmationPage({
         Order <span className="text-emerald">{order.order_number}</span> — thanks,{" "}
         {order.customer_name}.
       </p>
+
+      {emailParam === "failed" && (
+        <div className="gv-card border border-amber-500/30 bg-amber-500/5 rounded-lg p-4 mb-6">
+          <p className="text-amber-300 font-semibold mb-1">
+            ⚠️ Confirmation email could not be delivered
+          </p>
+          <p className="text-sm text-soft">
+            We couldn't send your order confirmation email. Your order{" "}
+            <span className="text-emerald font-medium">{order.order_number}</span>{" "}
+            has been saved in our system — <strong>please screenshot or bookmark
+            this page</strong> as your receipt. It contains your order number,
+            pricing, and fulfillment details, which are legally required
+            disclosures. If you provided an email above, double-check that it was
+            entered correctly.
+          </p>
+        </div>
+      )}
 
       <div className="gv-card text-left space-y-2 mb-8">
         <div className="flex justify-between">
