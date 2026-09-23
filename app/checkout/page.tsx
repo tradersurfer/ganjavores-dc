@@ -30,7 +30,10 @@ export default function CheckoutPage() {
   async function onSubmit(values: CheckoutFormValues) {
     setSubmitting(true);
     setServerError(null);
-    const result = await placeOrder(values, lines);
+    const result = await placeOrder(
+      values,
+      lines.map(({ variant_id, quantity }) => ({ variant_id, quantity }))
+    );
     setSubmitting(false);
 
     if (result.success) {
