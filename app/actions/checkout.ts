@@ -2,8 +2,8 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { checkoutSchema } from "@/lib/checkout-schema";
+import { validateTrustedCart, type TrustedCatalogVariant } from "@/lib/secure-checkout";
 import { sendOrderNotification } from "@/lib/notify";
-import type { CartLine } from "@/lib/types";
 
 function generateOrderNumber() {
   const date = new Date();
@@ -16,19 +16,43 @@ function generateOrderNumber() {
 
 export async function placeOrder(
   values: unknown,
-  lines: CartLine[]
+  lines: unknown
 ): Promise<{ success: true; orderId: string } | { success: false; error: string }> {
   const parsed = checkoutSchema.safeParse(values);
   if (!parsed.success) {
     return { success: false, error: parsed.error.issues[0]?.message ?? "Invalid form" };
   }
-  if (lines.length === 0) {
-    return { success: false, error: "Your bag is empty" };
+  if (!Array.isArray(lines) || lines.length === 0 || lines.length > 30) {
+    return { success: false, error: "Invalid cart" };
+  }
+
+  const clientVariantIds = lines.map((line) => {
+    if (!line || typeof line !== "object") return null;
+    const variantId = (line as Record<string, unknown>).variant_id;
+    return typeof variantId === "string" && variantId.length > 0 ? variantId : null;
+  });
+  if (clientVariantIds.some((variantId): variantId is null => variantId === null)) {
+    return { success: false, error: "Invalid cart" };
   }
 
   const supabase = await createClient();
+  const { data: variants, error: variantsError } = await supabase
+    .from("product_variants")
+    .select("id, product_id, label, price, inventory_count, products!inner(name, is_active)")
+    .in("id", clientVariantIds);
+
+  if (variantsError) {
+    return { success: false, error: "Couldn't verify your cart — try again." };
+  }
+
+  const trustedCart = validateTrustedCart(
+    lines,
+    (variants ?? []) as TrustedCatalogVariant[]
+  );
+  if (!trustedCart.success) return trustedCart;
+
+  const { items: orderItems, subtotal } = trustedCart;
   const data = parsed.data;
-  const subtotal = lines.reduce((sum, l) => sum + l.unit_price * l.quantity, 0);
   const orderNumber = generateOrderNumber();
 
   const { data: order, error: orderError } = await supabase
@@ -54,23 +78,12 @@ export async function placeOrder(
     return { success: false, error: "Couldn't place your order — try again." };
   }
 
-  const orderItems = lines.map((line) => ({
-    order_id: order.id,
-    product_id: line.product_id,
-    variant_id: line.variant_id,
-    product_name_snapshot: line.product_name,
-    variant_label_snapshot: line.variant_label,
-    unit_price: line.unit_price,
-    quantity: line.quantity,
-    line_total: line.unit_price * line.quantity,
-  }));
-
-  const { error: itemsError } = await supabase.from("order_items").insert(orderItems);
+  const orderItemsWithOrderId = orderItems.map((item) => ({ ...item, order_id: order.id }));
+  const { error: itemsError } = await supabase.from("order_items").insert(orderItemsWithOrderId);
   if (itemsError) {
     return { success: false, error: "Order created but items failed to save — call us." };
   }
 
-  // No-ops until RESEND_API_KEY is set — see lib/notify.ts for setup steps.
   await sendOrderNotification({
     order_number: orderNumber,
     customer_name: data.customer_name,
